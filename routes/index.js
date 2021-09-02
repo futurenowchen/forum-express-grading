@@ -55,4 +55,5 @@ module.exports = (app, passport) => {
   app.get('/logout', userController.logout)
 
   app.post('/comments', authenticated, commentController.postComment)
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment) //need admin auth
 }
