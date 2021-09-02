@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Restaurant.belongsTo(models.Category)  // 加入關聯設定
+      Restaurant.hasMany(models.Comment)
     }
   };
   Restaurant.init({
