@@ -3,6 +3,7 @@ const db = require('../models')
 const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const helpers = require('../_helpers')
 
 const userController = {
   signUpPage: (req, res) => {
@@ -50,6 +51,11 @@ const userController = {
   },
 
   getUser: (req, res) => {
+    if (helpers.getUser(req).id !== Number(req.params.id)) {
+      req.flash('error_messages', "you can't enter other's profile!")
+      return res.redirect('back')
+    }
+
     User.findByPk(req.params.id)
       .then(user => {
         return res.render('profile', { user: user.toJSON() })
@@ -57,6 +63,11 @@ const userController = {
   },
 
   editUser: (req, res) => {
+    if (helpers.getUser(req).id !== Number(req.params.id)) {
+      req.flash('error_messages', "you can't enter other's profile!")
+      return res.redirect('back')
+    }
+
     User.findByPk(req.params.id)
       .then(user => {
         return res.render('editProfile', { user: user.toJSON() })
@@ -64,7 +75,11 @@ const userController = {
   },
 
   putUser: (req, res) => {
-    console.log(req.body)
+    if (!req.body.name) {
+      req.flash('error_messages', "profileName didn't exist")
+      return res.redirect('back')
+    }
+
     const { file } = req
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID);
@@ -72,7 +87,7 @@ const userController = {
         return User.findByPk(req.params.id)
           .then((user) => {
             user.update({
-              name: req.body.profileName,
+              name: req.body.name,
               image: file ? img.data.link : user.image
             })
               .then((user) => {
@@ -86,7 +101,7 @@ const userController = {
       return User.findByPk(req.params.id)
         .then((user) => {
           user.update({
-            name: req.body.profileName,
+            name: req.body.name,
             image: user.image
           })
             .then((user) => {
