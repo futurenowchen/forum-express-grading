@@ -1,16 +1,36 @@
 <div class="card mb-3" style="max-width: 1024px; height: 300px;">
   <div class="row g-0">
     <div class="col-md-4">
-      <img src="{{user.image}}" class="img-fluid rounded-start" alt="...">
+      <img src="{{user.image}}" class="img-fluid rounded-start" alt="{{user.name}}'s image">
     </div>
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title">{{user.name}}</h5>
         <p class="card-text">{{user.email}}</p>
+        <p class="card-text">{{totalComment}} 已評論餐廳</p>
         <a href='/users/{{user.id}}/edit'>
           <button type="button" class="btn btn-primary">edit</button>
         </a>
       </div>
     </div>
   </div>
+</div>
+
+<div class="card" style="max-width: 1024px;">
+  <div class="card-header">
+    {{totalComment}} 已評論餐廳
+  </div>
+
+  <div class="container m-4">
+    <div class="row">
+      {{#each restaurants}}
+      <div class="col-sm-2">
+        <a href='/restaurants/{{this.restaurantId}}'>
+          <img src="{{this.restaurantImage}}" class="img-fluid rounded-start" alt="{{this.restaurantImage}}'s image">
+        </a>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
 </div>
