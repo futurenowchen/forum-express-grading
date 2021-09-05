@@ -62,7 +62,22 @@ const restController = {
       ]
     }).then(restaurant => {
       return res.render('restaurant', {
-        restaurant: restaurant.toJSON()
+        restaurant: restaurant.toJSON(),
+      })
+    })
+  },
+
+  getRestaurantDashboard: (req, res) => {
+    return Restaurant.findByPk(req.params.id, {
+      include: [
+        Category,
+        { model: Comment, include: [User] }
+      ]
+    }).then(restaurant => {
+      const totalComment = restaurant.dataValues.Comments.length
+      return res.render('restaurantDashboard', {
+        restaurant: restaurant.toJSON(),
+        totalComment: totalComment
       })
     })
   },
